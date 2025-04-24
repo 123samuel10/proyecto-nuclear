@@ -31,7 +31,7 @@ class RegistroController extends Controller
             'password' => Hash::make($request->contraseña),
         ]);
 
-        // Iniciar sesión automáticamente
+        // Iniciar sesión automáticament
         Auth::login($usuario);
 
         // Redirigir a la página principal
