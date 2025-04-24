@@ -20,6 +20,7 @@ class RegistroController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
           'email' => 'required|email|unique:users,email',
+          //contraseña en el formulario y la validación porque quieres que todo esté en español y legible para el usuario
             'contraseña' => 'required|confirmed|min:6',
         ]);
 

@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Bienvenido</title>
-</head>
-<body>
-    <h1>Bienvenido al sistema de autenticación</h1>
-    <a href="{{ route('login.formulario') }}">Iniciar sesión</a>
-    <a href="{{ route('register.formulario') }}">Registrarse</a>
-</body>
-</html>
+@extends('layouts.app')
+
+@section('content')
+<h1>estaaa es la parte donde se van a ver las publicaciones de todos los usuairos</h1>
+
+@endsection
