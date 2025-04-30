@@ -8,55 +8,31 @@ namespace App\Http\Controllers\Autenticacion;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Publicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 // Definición de la clase BienvenidaController que extiende de la clase base Controller
 class BienvenidaController extends Controller
 {
+
     public function index()
     {
-        return view('bienvenida');
+        // Trae todas las publicaciones, ordenadas de más reciente a más antigua
+        $publicaciones = Publicacion::latest()->get();
+        return view('bienvenida', compact('publicaciones'));
     }
 
     public function verPerfil()
     {
-        // Asegúrate de que el usuario esté autenticado
-        $user = Auth::user(); // Obtén el usuario autenticado
-        return view('perfil', compact('user')); // Pasa el usuario a la vista
-    }
-
-    public function cambiarContraseña(Request $request)
-    {
-        // Asegúrate de que el usuario esté autenticado
-        $user = Auth::user(); // Esto debería ser una instancia de User
-
-        // Validar la nueva contraseña
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|min:6|confirmed', // 'password_confirmation' debe estar en el formulario
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('perfil')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        // Asegúrate de que $user es una instancia de User
-        if ($user instanceof \App\Models\User) {
-            // Encriptar y guardar la contraseña
-            $user->password = Hash::make($request->password); // Encriptar la contraseña
-            $user->save(); // Guardar el cambio en la base de datos
-        } else {
-            // Si $user no es una instancia de User, manejar el error
-            return redirect()->route('perfil')->with('error', 'No se pudo actualizar la contraseña');
-        }
-
-        // Cambiar esta línea en el método cambiarContraseña
-        return redirect()->route('ver-perfil')->with('success', 'Contraseña cambiada exitosamente');
-
+        $user = Auth::user();
+        // Trae solo las publicaciones del usuario autenticado
+        $misPublicaciones = Publicacion::where('user_id', $user->id)->latest()->get();
+        return view('perfil', compact('user', 'misPublicaciones'));
     }
 
 
@@ -65,5 +41,36 @@ class BienvenidaController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
+
+    //esta se usa para actualizar el perfil
+    public function actualizarPerfil(Request $request)
+{
+/** @var \App\Models\User $user */
+     $user = Auth::user();
+
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'descripcion_academica' => 'nullable|string',
+        'intereses' => 'nullable|string',
+        'foto_perfil' => 'nullable|image|max:2048', // Máx 2MB
+    ]);
+
+    $user->name = $request->name;
+    $user->descripcion_academica = $request->descripcion_academica;
+    $user->intereses = $request->intereses;
+
+    if ($request->hasFile('foto_perfil')) {
+        $foto = $request->file('foto_perfil');
+        $nombreFoto = time() . '_' . $foto->getClientOriginalName();
+        $foto->storeAs('public/fotos_perfil', $nombreFoto);
+        $user->foto_perfil = 'fotos_perfil/' . $nombreFoto;
+    }
+
+    $user->save();
+
+    return redirect()->back()->with('success', 'Perfil actualizado correctamente.');
+}
+
 
 }

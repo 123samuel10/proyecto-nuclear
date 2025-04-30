@@ -8,49 +8,57 @@
 </head>
 <body class="bg-gray-100 font-sans antialiased">
 
-    <div class="min-h-screen flex flex-col items-center justify-center">
-        <!-- Contenedor del formulario -->
-        <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Iniciar sesión</h2>
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <!-- Tarjeta combinada -->
+        <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-2xl overflow-hidden max-w-4xl w-full">
 
-             <!-- login va porque tiene el metodo post -->
-            <form action="{{ route('login') }}" method="POST" class="space-y-6">
-                @csrf
+            <!-- Imagen a la izquierda -->
+            <div class="hidden md:block md:w-1/2">
+                <img src="/storage/fondo.png" alt="Imagen decorativa"
+                     class="w-full h-full object-cover" />
+            </div>
 
-                <!-- Correo -->
-                <div>
-                    <label for="email" class="block mb-1 font-medium text-gray-700">Correo electrónico</label>
-                    <input type="email" name="email" id="email" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                </div>
+            <!-- Formulario a la derecha -->
+            <div class="w-full md:w-1/2 p-8 bg-white bg-opacity-90">
+                <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Iniciar sesión</h2>
 
-                <!-- Contraseña -->
-                <div>
-                    <label for="password" class="block mb-1 font-medium text-gray-700">Contraseña</label>
-                    <input type="password" name="contraseña" id="password" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                </div>
+                <form action="{{ route('login') }}" method="POST" class="space-y-6">
+                    @csrf
 
-                <!-- Botón -->
-                <div>
-                    <button type="submit"
-                        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                        Iniciar sesión
-                    </button>
-                </div>
+                    <!-- Correo -->
+                    <div>
+                        <label for="email" class="block mb-1 font-medium text-gray-700">Correo electrónico</label>
+                        <input type="email" name="email" id="email" required
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
 
-                <!-- Enlace de registro -->
-                <p class="text-sm text-center text-gray-600">
-                    ¿No tienes cuenta?
-                    <a href="{{ route('register.formulario') }}" class="text-blue-600 hover:underline">Regístrate</a>
-                </p>
+                    <!-- Contraseña -->
+                    <div>
+                        <label for="password" class="block mb-1 font-medium text-gray-700">Contraseña</label>
+                        <input type="password" name="contraseña" id="password" required
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
 
-                <!-- Enlace para recuperar la contraseña -->
-                <p class="text-sm text-center text-gray-600 mt-2">
-                    <a href="{{ route('recuperar-contraseña.formulario') }}" class="text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
-                </p>
+                    <!-- Botón -->
+                    <div>
+                        <button type="submit"
+                            class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            Iniciar sesión
+                        </button>
+                    </div>
 
-            </form>
+                    <!-- Enlace de registro -->
+                    <p class="text-sm text-center text-gray-700">
+                        ¿No tienes cuenta?
+                        <a href="{{ route('register.formulario') }}" class="text-blue-600 hover:underline">Regístrate</a>
+                    </p>
+
+                    <!-- Enlace para recuperar la contraseña -->
+                    <p class="text-sm text-center text-gray-700 mt-2">
+                        <a href="{{ route('recuperar-contraseña.formulario') }}" class="text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
+                    </p>
+                </form>
+            </div>
         </div>
     </div>
 

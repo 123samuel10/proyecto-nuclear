@@ -30,5 +30,9 @@
     @if(session('success'))
         <p class="mt-4 text-green-600">{{ session('success') }}</p>
     @endif
+
+    <div class="mt-6 text-center">
+        <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Volver a iniciar sesión</a>
+    </div>
 </div>
 @endsection
