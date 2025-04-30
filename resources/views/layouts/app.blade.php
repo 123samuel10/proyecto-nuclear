@@ -100,7 +100,7 @@
             <a href="#" class="hover:text-gray-300 transition" aria-label="Twitter">
                 <i class="fab fa-twitter"></i>
             </a>
-            <a href="#" class="hover:text-gray-300 transition" aria-label="Instagram">
+            <a href="https://www.instagram.com/uvonhumboldt?igsh=dHdjdnB2Y2xnZnJx" class="hover:text-gray-300 transition" aria-label="Instagram">
                 <i class="fab fa-instagram"></i>
             </a>
         </div>

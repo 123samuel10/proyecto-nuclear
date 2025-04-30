@@ -1,11 +1,15 @@
 <?php
 
+
 use App\Http\Controllers\Autenticacion\BienvenidaController;  // Importa el controlador de bienvenida.
 use App\Http\Controllers\Autenticacion\CerrarSesionController; // Importa el controlador para cerrar sesión.
 use App\Http\Controllers\Autenticacion\InicioSesionController; // Importa el controlador para inicio de sesión.
 // use App\Http\Controllers\Autenticacion\RestablecerContrasenaController; // Importa el controlador para recuperar contraseña.
 use App\Http\Controllers\Autenticacion\RegistroController; // Importa el controlador para registro de usuario.
-use App\Http\Controllers\RestablecerContrasenaController as ControllersRestablecerContrasenaController;
+use App\Http\Controllers\Perfil\PerfilController;
+use App\Http\Controllers\Autenticacion\RestablecerContrasenaController;
+use App\Http\Controllers\PublicacionController;
+// use App\Http\Controllers\RestablecerContrasenaController as ControllersRestablecerContrasenaController;
 use Illuminate\Support\Facades\Route; // Importa la fachada Route, que se usa para definir rutas.
 
 // Redirige la ruta principal al formulario de inicio de sesión
@@ -42,11 +46,33 @@ Route::get('/bienvenida', [BienvenidaController::class, 'index'])->name('bienven
 
 // Route::get('/bienvenida', [BienvenidaController::class, 'index'])->name('bienvenida');
 Route::get('/perfil', [BienvenidaController::class, 'verPerfil'])->name('ver-perfil');
+
+
+
+
 Route::post('/cambiar-contraseña', [BienvenidaController::class, 'cambiarContraseña'])->name('cambiar-contraseña');
 Route::get('/logout', [BienvenidaController::class, 'logout'])->name('logout');
 
 
 
 // web.php
-Route::get('/recuperar-contraseña', [ControllersRestablecerContrasenaController::class, 'mostrarFormulario'])->name('recuperar-contraseña.formulario');
-Route::post('/recuperar-contraseña', [ControllersRestablecerContrasenaController::class, 'restablecer'])->name('recuperar-contraseña');
+Route::get('/recuperar-contraseña', [RestablecerContrasenaController::class, 'mostrarFormulario'])->name('recuperar-contraseña.formulario');
+Route::post('/recuperar-contraseña', [RestablecerContrasenaController::class, 'restablecer'])->name('recuperar-contraseña');
+
+
+
+// Ruta para mostrar el formulario de edición de perfil
+Route::get('/perfil/editar', [PerfilController::class, 'editar'])->name('perfil.editar');
+// Ruta para actualizar los datos del perfil
+Route::put('/perfil/actualizar', [PerfilController::class, 'actualizar'])->name('perfil.actualizar');
+
+
+
+
+
+//publicaciones
+// Route::get('/publicaciones', [PublicacionController::class, 'index'])->name('publicaciones.index');
+Route::get('/publicaciones/crear', [PublicacionController::class, 'create'])->name('publicaciones.create');
+Route::post('/publicaciones', [PublicacionController::class, 'store'])->name('publicaciones.store');
+Route::get('publicaciones/{publicacion}/editar', [PublicacionController::class, 'edit'])->name('publicaciones.edit');
+Route::put('/publicaciones/{publicacion}', [PublicacionController::class, 'update'])->name('publicaciones.update');
