@@ -50,7 +50,7 @@ Route::get('/perfil', [BienvenidaController::class, 'verPerfil'])->name('ver-per
 
 
 
-Route::post('/cambiar-contraseña', [BienvenidaController::class, 'cambiarContraseña'])->name('cambiar-contraseña');
+// Route::post('/cambiar-contraseña', [BienvenidaController::class, 'cambiarContraseña'])->name('cambiar-contraseña');
 Route::get('/logout', [BienvenidaController::class, 'logout'])->name('logout');
 
 
@@ -58,6 +58,7 @@ Route::get('/logout', [BienvenidaController::class, 'logout'])->name('logout');
 // web.php
 Route::get('/recuperar-contraseña', [RestablecerContrasenaController::class, 'mostrarFormulario'])->name('recuperar-contraseña.formulario');
 Route::post('/recuperar-contraseña', [RestablecerContrasenaController::class, 'restablecer'])->name('recuperar-contraseña');
+Route::post('/enviar-codigo', [RestablecerContrasenaController::class, 'enviarCodigo'])->name('enviar-codigo');
 
 
 
