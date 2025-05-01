@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class PublicacionController extends Controller
 {
-    public function index()
-    {
-        $publicaciones = Publicacion::latest()->with('user')->get();
-        return view('publicaciones.index', compact('publicaciones'));
-    }
+    // public function index()
+    // {
+    //     $publicaciones = Publicacion::latest()->with('user')->get();
+    //     return view('publicaciones.index', compact('publicaciones'));
+    // }
 
     public function create()
     {
