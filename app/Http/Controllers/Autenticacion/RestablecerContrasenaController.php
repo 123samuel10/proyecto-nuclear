@@ -72,7 +72,7 @@ class RestablecerContrasenaController extends Controller
             ['codigo' => $codigo, 'created_at' => Carbon::now()] // Actualiza el código y la fecha de creación
         );
 
-        // Intenta enviar el código al correo del usuario
+        // Intenta enviar el código al correo del usuarioooo
         try {
             Mail::to($email)->send(new CodigoRecuperacionMail($codigo)); // Envía el correo con el código
             return back()->with('success', 'Se ha enviado un código a tu correo.'); // Mensaje de éxito
