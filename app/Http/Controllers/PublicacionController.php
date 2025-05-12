@@ -32,7 +32,8 @@ class PublicacionController extends Controller
         $rutaArchivo = null;
 
         if ($request->hasFile('archivo')) {
-            $rutaArchivo = $request->file('archivo')->store('public/publicaciones');
+            $rutaArchivo = $request->file('archivo')->store('publicaciones', 'public');
+
         }
 
         Publicacion::create([
@@ -77,6 +78,13 @@ public function update(Request $request, $id)
     $publicacion->save();
 
     return redirect()->route('bienvenida')->with('success', 'Publicación actualizada correctamente.');
+}
+public function destroy($id)
+{
+    $publicacion = Publicacion::findOrFail($id);
+    $publicacion->delete();
+
+    return redirect()->route('bienvenida')->with('success', 'Publicación eliminada correctamente.');
 }
 
 }

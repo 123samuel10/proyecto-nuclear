@@ -2,6 +2,7 @@
 
 namespace App\Models; // Define el namespace donde se encuentra el modelo User
 
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail; // (Comentado) Se usaría si quisieras requerir verificación de email
 
 use Illuminate\Database\Eloquent\Factories\HasFactory; // Importa el trait para habilitar el uso de factories en este modelo
@@ -50,4 +51,44 @@ class User extends Authenticatable // Define la clase User que hereda de Authent
             'password' => 'hashed', // Indica que el password debe ser tratado como un hash
         ];
     }
+
+   /**
+     * Usuarios que siguen a este usuario.
+     */
+    /**
+     * Usuarios que siguen a este usuario (relación inversa).
+     */
+    /**
+     * Relación con los seguidores
+     */
+// Relación con los seguidores
+public function seguidores()
+{
+    return $this->belongsToMany(User::class, 'seguimientos', 'seguido_id', 'usuario_id');
+}
+
+// Relación con los seguidos
+public function seguidos()
+{
+    return $this->belongsToMany(User::class, 'seguimientos', 'usuario_id', 'seguido_id');
+}
+
+public function estaSiguiendo($usuarioId)
+{
+    // Corregir la referencia a la columna `id` de la tabla `users` correctamente
+    return $this->seguidos()->where('seguimientos.seguido_id', $usuarioId)->exists();
+}
+
+
+
+
+
+  // Relación con las publicaciones
+    public function publicaciones()
+    {
+        return $this->hasMany(Publicacion::class);
+    }
+
+
+
 }

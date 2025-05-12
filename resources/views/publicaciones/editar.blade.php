@@ -20,10 +20,10 @@
         <div class="mb-4">
             <label for="tipo" class="block text-sm font-semibold text-gray-700">Tipo de publicación</label>
             <select name="tipo" id="tipo" class="mt-1 p-2 w-full border rounded-lg">
-                <option value="tutorial" {{ $publicacion->tipo == 'tutorial' ? 'selected' : '' }}>Tutorial</option>
-                <option value="video" {{ $publicacion->tipo == 'video' ? 'selected' : '' }}>Video</option>
-                <option value="material" {{ $publicacion->tipo == 'material' ? 'selected' : '' }}>Material de estudio</option>
-                <option value="evento" {{ $publicacion->tipo == 'evento' ? 'selected' : '' }}>Evento</option>
+                <option value="tutorial" {{ old('tipo', $publicacion->tipo) == 'tutorial' ? 'selected' : '' }}>Tutorial</option>
+                <option value="video" {{ old('tipo', $publicacion->tipo) == 'video' ? 'selected' : '' }}>Video</option>
+                <option value="material" {{ old('tipo', $publicacion->tipo) == 'material' ? 'selected' : '' }}>Material de estudio</option>
+                <option value="evento" {{ old('tipo', $publicacion->tipo) == 'evento' ? 'selected' : '' }}>Evento</option>
             </select>
         </div>
 

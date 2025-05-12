@@ -21,20 +21,33 @@ class BienvenidaController extends Controller
     public function index()
     {
         // Trae todas las publicaciones, ordenadas de más reciente a más antigua
-        $publicaciones = Publicacion::latest()->get();
+        // $publicaciones = Publicacion::latest()->get();
+      $publicaciones = Publicacion::with('comentarios.user')->latest()->get(); // Carga las publicaciones junto con los comentarios y los usuarios asociados
+
         // Devuelve la vista 'bienvenida' pasando las publicaciones como parámetro
         return view('bienvenida', compact('publicaciones'));
     }
 
     // Método que muestra el perfil del usuario autenticado
-    public function verPerfil()
-    {
-        $user = Auth::user(); // Obtiene el usuario autenticado
-        // Trae solo las publicaciones del usuario autenticado, ordenadas de más reciente a más antigua
-        $misPublicaciones = Publicacion::where('user_id', $user->id)->latest()->get();
-        // Devuelve la vista 'perfil' pasando el usuario y sus publicaciones como parámetros
-        return view('perfil', compact('user', 'misPublicaciones'));
-    }
+public function verPerfil()
+{
+    $user = Auth::user(); // Obtiene el usuario autenticado
+
+    // Trae el usuario con la cantidad de seguidores y seguidos
+    $user = User::withCount(['seguidores', 'seguidos'])->findOrFail($user->id);
+
+    // Trae solo las publicaciones del usuario autenticado, ordenadas de más reciente a más antigua
+    $misPublicaciones = Publicacion::where('user_id', $user->id)->latest()->get();
+
+    // Devuelve la vista 'perfil' pasando el usuario, la cuenta de seguidores, seguidos y sus publicaciones como parámetros
+    return view('perfil', [
+        'user' => $user,
+        'misPublicaciones' => $misPublicaciones,
+        'seguidoresCount' => $user->seguidores_count,  // Cantidad de seguidores
+        'seguidosCount' => $user->seguidos_count,      // Cantidad de seguidos
+    ]);
+}
+
 
     // Método que cierra la sesión del usuario
     public function logout()
@@ -79,4 +92,21 @@ class BienvenidaController extends Controller
         // Redirige de vuelta con un mensaje de éxito
         return redirect()->back()->with('success', 'Perfil actualizado correctamente.');
     }
+
+
+
+
+public function buscarUsuarios(Request $request)
+    {
+        $query = $request->input('q');
+
+        $usuarios = User::where('name', 'LIKE', '%' . $query . '%')
+                        ->select('id', 'name', 'foto_perfil')
+                        ->limit(10)
+                        ->get();
+
+        return response()->json($usuarios);
+    }
+
+
 }

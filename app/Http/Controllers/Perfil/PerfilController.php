@@ -46,4 +46,13 @@ public function actualizar(Request $request)
 
     return redirect()->route('perfil.editar')->with('success', 'Perfil actualizado correctamente.');
 }
+
+public function mostrar($id)
+{
+    $user = User::withCount(['seguidores', 'seguidos'])->findOrFail($id);
+    $misPublicaciones = $user->publicaciones;
+
+    return view('perfil.mostrar', compact('user', 'misPublicaciones'));
+}
+
 }

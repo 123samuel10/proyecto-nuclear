@@ -8,7 +8,9 @@ use App\Http\Controllers\Autenticacion\InicioSesionController; // Importa el con
 use App\Http\Controllers\Autenticacion\RegistroController; // Importa el controlador para registro de usuario.
 use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\Autenticacion\RestablecerContrasenaController;
+use App\Http\Controllers\Comentario\ComentarioController;
 use App\Http\Controllers\PublicacionController;
+use App\Http\Controllers\Seguimiento\SeguimientoController;
 // use App\Http\Controllers\RestablecerContrasenaController as ControllersRestablecerContrasenaController;
 use Illuminate\Support\Facades\Route; // Importa la fachada Route, que se usa para definir rutas.
 
@@ -66,6 +68,7 @@ Route::post('/enviar-codigo', [RestablecerContrasenaController::class, 'enviarCo
 Route::get('/perfil/editar', [PerfilController::class, 'editar'])->name('perfil.editar');
 // Ruta para actualizar los datos del perfil
 Route::put('/perfil/actualizar', [PerfilController::class, 'actualizar'])->name('perfil.actualizar');
+Route::delete('publicaciones/{publicacion}', [PublicacionController::class, 'destroy'])->name('publicaciones.destroy');
 
 
 
@@ -77,3 +80,25 @@ Route::get('/publicaciones/crear', [PublicacionController::class, 'create'])->na
 Route::post('/publicaciones', [PublicacionController::class, 'store'])->name('publicaciones.store');
 Route::get('publicaciones/{publicacion}/editar', [PublicacionController::class, 'edit'])->name('publicaciones.edit');
 Route::put('/publicaciones/{publicacion}', [PublicacionController::class, 'update'])->name('publicaciones.update');
+
+
+
+//comentarios:
+// Route::post('/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
+// Rutas de comentarios
+ Route::post('/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
+    Route::get('/comentarios/{id}/edit', [ComentarioController::class, 'edit'])->name('comentarios.edit');
+    Route::put('/comentarios/{id}', [ComentarioController::class, 'update'])->name('comentarios.update');
+    Route::delete('/comentarios/{id}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
+
+
+
+//sistema de busquedad
+Route::get('/buscar-usuarios', [BienvenidaController::class, 'buscarUsuarios'])->name('buscar.usuarios');
+Route::get('/perfil/{id}', [PerfilController::class, 'mostrar'])->name('perfil.mostrar');
+
+
+//sistema de seguimiento:
+
+Route::post('/seguir/{id}', [SeguimientoController::class, 'seguir'])->name('seguir');
+Route::delete('/dejar-de-seguir/{id}', [SeguimientoController::class, 'dejarDeSeguir'])->name('dejarDeSeguir');
