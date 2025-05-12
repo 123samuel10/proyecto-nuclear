@@ -40,14 +40,16 @@
                     <p class="text-2xl font-bold">{{ $misPublicaciones->count() }}</p>
                     <p class="text-sm text-gray-400">Publicaciones</p>
                 </div>
-                <div class="text-center">
-                    <p class="text-2xl font-bold">0</p>
-                    <p class="text-sm text-gray-400">Seguidores</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-2xl font-bold">0</p>
-                    <p class="text-sm text-gray-400">Seguidos</p>
-                </div>
+<div class="text-center">
+    <p class="text-2xl font-bold">{{ $seguidoresCount }}</p>
+    <p class="text-sm text-gray-400">Seguidores</p>
+</div>
+<div class="text-center">
+    <p class="text-2xl font-bold">{{ $seguidosCount }}</p>
+    <p class="text-sm text-gray-400">Seguidos</p>
+</div>
+
+
             </div>
         </div>
 
