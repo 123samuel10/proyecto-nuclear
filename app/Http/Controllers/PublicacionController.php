@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Etiqueta;
 use App\Models\Publicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,15 +10,10 @@ use Illuminate\Support\Facades\Storage;
 
 class PublicacionController extends Controller
 {
-    // public function index()
-    // {
-    //     $publicaciones = Publicacion::latest()->with('user')->get();
-    //     return view('publicaciones.index', compact('publicaciones'));
-    // }
-
-    public function create()
+  public function create()
     {
-        return view('publicaciones.crear');
+        $etiquetas = Etiqueta::all();
+        return view('publicaciones.crear', compact('etiquetas'));
     }
 
     public function store(Request $request)
@@ -26,17 +22,18 @@ class PublicacionController extends Controller
             'titulo' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'tipo' => 'required|in:tutorial,video,material,articulo,evento',
-            'archivo' => 'nullable|file|max:20480', // 20MB máximo
+            'archivo' => 'nullable|file|max:20480',
+            'etiquetas' => 'nullable|array',
+            'etiquetas.*' => 'exists:etiquetas,id'
         ]);
 
         $rutaArchivo = null;
 
         if ($request->hasFile('archivo')) {
             $rutaArchivo = $request->file('archivo')->store('publicaciones', 'public');
-
         }
 
-        Publicacion::create([
+        $publicacion = Publicacion::create([
             'user_id' => Auth::id(),
             'titulo' => $request->titulo,
             'descripcion' => $request->descripcion,
@@ -44,47 +41,75 @@ class PublicacionController extends Controller
             'archivo' => $rutaArchivo ? str_replace('public/', '', $rutaArchivo) : null,
         ]);
 
-        return redirect()->route('bienvenida')->with('success', '¡Publicación creada correctamente!');
+        if ($request->filled('etiquetas')) {
+            $publicacion->etiquetas()->sync($request->etiquetas);
+        }
+
+        return redirect()->route('bienvenida')->with([
+            'publicacion_creada' => true,
+            'mensaje_exito' => '¡Publicación creada correctamente!',
+        ]);
     }
 
-    // Método para mostrar el formulario de edición
-public function edit($id)
-{
-    $publicacion = Publicacion::findOrFail($id);
-    return view('publicaciones.editar', compact('publicacion'));
-}
+    public function edit($id)
+    {
+        $publicacion = Publicacion::findOrFail($id);
+        $etiquetas = Etiqueta::all();
+        $etiquetasSeleccionadas = $publicacion->etiquetas->pluck('id')->toArray();
 
-// Método para actualizar la publicación
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'titulo' => 'required|string|max:255',
-        'descripcion' => 'required|string',
-        'tipo' => 'required|string',
-        'archivo' => 'nullable|file|mimes:jpg,png,pdf,docx,txt|max:2048',
-    ]);
-
-    $publicacion = Publicacion::findOrFail($id);
-
-    $publicacion->titulo = $request->titulo;
-    $publicacion->descripcion = $request->descripcion;
-    $publicacion->tipo = $request->tipo;
-
-    if ($request->hasFile('archivo')) {
-        $archivo = $request->file('archivo')->store('publicaciones', 'public');
-        $publicacion->archivo = $archivo;
+        return view('publicaciones.editar', compact('publicacion', 'etiquetas', 'etiquetasSeleccionadas'));
     }
 
-    $publicacion->save();
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'tipo' => 'required|in:tutorial,video,material,articulo,evento',
+            'archivo' => 'nullable|file|mimes:jpg,png,pdf,docx,txt|max:20480',
+            'etiquetas' => 'nullable|array',
+            'etiquetas.*' => 'exists:etiquetas,id'
+        ]);
 
-    return redirect()->route('bienvenida')->with('success', 'Publicación actualizada correctamente.');
-}
-public function destroy($id)
-{
-    $publicacion = Publicacion::findOrFail($id);
-    $publicacion->delete();
+        $publicacion = Publicacion::findOrFail($id);
+        $publicacion->titulo = $request->titulo;
+        $publicacion->descripcion = $request->descripcion;
+        $publicacion->tipo = $request->tipo;
 
-    return redirect()->route('bienvenida')->with('success', 'Publicación eliminada correctamente.');
-}
+        if ($request->hasFile('archivo')) {
+            if ($publicacion->archivo && Storage::disk('public')->exists($publicacion->archivo)) {
+                Storage::disk('public')->delete($publicacion->archivo);
+            }
+
+            $archivo = $request->file('archivo')->store('publicaciones', 'public');
+            $publicacion->archivo = str_replace('public/', '', $archivo);
+        }
+
+        $publicacion->save();
+
+        if ($request->filled('etiquetas')) {
+            $publicacion->etiquetas()->sync($request->etiquetas);
+        } else {
+            $publicacion->etiquetas()->detach(); // Borra etiquetas si no se seleccionan
+        }
+
+        return redirect()->route('bienvenida')->with([
+            'publicacion_creada' => true,
+            'mensaje_exito' => '¡Publicación actualizada correctamente!',
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $publicacion = Publicacion::findOrFail($id);
+        $publicacion->etiquetas()->detach(); // Borra relación antes de eliminar
+        $publicacion->delete();
+
+        return redirect()->route('bienvenida')->with([
+            'publicacion_creada' => true,
+            'mensaje_exito' => '¡Publicación eliminada correctamente!',
+        ]);
+    }
+
 
 }

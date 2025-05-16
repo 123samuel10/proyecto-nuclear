@@ -30,4 +30,19 @@ class Publicacion extends Model
 {
     return $this->hasMany(Comentario::class);
 }
+public function etiquetas()
+{
+    return $this->belongsToMany(Etiqueta::class, 'publicacion_etiqueta');
+}
+public function megustas()
+{
+    return $this->hasMany(MeGusta::class, 'publicacion_id');
+}
+
+public function leDioMeGusta($usuarioId)
+{
+    return $this->megustas()->where('usuario_id', $usuarioId)->exists();
+}
+
+
 }

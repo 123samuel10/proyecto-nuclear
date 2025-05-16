@@ -19,6 +19,7 @@ class Comentario extends Model
 
 
 
+
     // Relación con el modelo Publicacion
     public function publicacion()
     {

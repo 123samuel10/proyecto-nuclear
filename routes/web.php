@@ -9,6 +9,7 @@ use App\Http\Controllers\Autenticacion\RegistroController; // Importa el control
 use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\Autenticacion\RestablecerContrasenaController;
 use App\Http\Controllers\Comentario\ComentarioController;
+use App\Http\Controllers\MeGustaController;
 use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\Seguimiento\SeguimientoController;
 // use App\Http\Controllers\RestablecerContrasenaController as ControllersRestablecerContrasenaController;
@@ -64,13 +65,15 @@ Route::post('/enviar-codigo', [RestablecerContrasenaController::class, 'enviarCo
 
 
 
+//sistema de busquedad
+Route::get('/buscar-usuarios', [BienvenidaController::class, 'buscarUsuarios'])->name('buscar.usuarios');
+Route::get('/buscar-publicaciones-etiqueta', [BienvenidaController::class, 'buscarPublicacionesPorEtiqueta'])->name('buscar.publicaciones.etiqueta');
+
+
 // Ruta para mostrar el formulario de edición de perfil
 Route::get('/perfil/editar', [PerfilController::class, 'editar'])->name('perfil.editar');
 // Ruta para actualizar los datos del perfil
 Route::put('/perfil/actualizar', [PerfilController::class, 'actualizar'])->name('perfil.actualizar');
-Route::delete('publicaciones/{publicacion}', [PublicacionController::class, 'destroy'])->name('publicaciones.destroy');
-
-
 
 
 
@@ -79,7 +82,10 @@ Route::delete('publicaciones/{publicacion}', [PublicacionController::class, 'des
 Route::get('/publicaciones/crear', [PublicacionController::class, 'create'])->name('publicaciones.create');
 Route::post('/publicaciones', [PublicacionController::class, 'store'])->name('publicaciones.store');
 Route::get('publicaciones/{publicacion}/editar', [PublicacionController::class, 'edit'])->name('publicaciones.edit');
-Route::put('/publicaciones/{publicacion}', [PublicacionController::class, 'update'])->name('publicaciones.update');
+
+Route::put('publicaciones/{publicacion}', [PublicacionController::class, 'update'])->name('publicaciones.update');
+Route::delete('publicaciones/{publicacion}', [PublicacionController::class, 'destroy'])->name('publicaciones.destroy');
+Route::get('/publicaciones/{publicacion}', [BienvenidaController::class, 'mostrarPublicacion'])->name('publicacion.mostrar');
 
 
 
@@ -93,8 +99,8 @@ Route::put('/publicaciones/{publicacion}', [PublicacionController::class, 'updat
 
 
 
-//sistema de busquedad
-Route::get('/buscar-usuarios', [BienvenidaController::class, 'buscarUsuarios'])->name('buscar.usuarios');
+
+
 Route::get('/perfil/{id}', [PerfilController::class, 'mostrar'])->name('perfil.mostrar');
 
 
@@ -102,3 +108,14 @@ Route::get('/perfil/{id}', [PerfilController::class, 'mostrar'])->name('perfil.m
 
 Route::post('/seguir/{id}', [SeguimientoController::class, 'seguir'])->name('seguir');
 Route::delete('/dejar-de-seguir/{id}', [SeguimientoController::class, 'dejarDeSeguir'])->name('dejarDeSeguir');
+
+
+//me gusta
+// web.php
+Route::post('/me-gusta/{publicacion}', [MeGustaController::class, 'toggle'])->name('me-gusta.toggle');
+
+Route::get('/me-gusta/{publicacion}/usuarios', [MeGustaController::class, 'usuarios'])->name('me-gusta.usuarios');
+
+
+//notificaciones
+Route::get('/notificaciones-me-gusta', [MeGustaController::class, 'notificaciones'])->name('notificaciones.megusta');

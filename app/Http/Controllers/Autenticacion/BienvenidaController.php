@@ -6,6 +6,7 @@
 namespace App\Http\Controllers\Autenticacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notificacion;
 use App\Models\Publicacion; // Importa el modelo de Publicación
 use Illuminate\Http\Request; // Importa la clase Request para manejar solicitudes HTTP
 use Illuminate\Support\Facades\Auth; // Importa Auth para gestionar la autenticación de usuarios
@@ -107,6 +108,40 @@ public function buscarUsuarios(Request $request)
 
         return response()->json($usuarios);
     }
+public function buscarPublicacionesPorEtiqueta(Request $request)
+{
+    $query = $request->input('q');
+
+    $publicaciones = Publicacion::whereHas('etiquetas', function($q) use ($query) {
+        $q->where('nombre', 'LIKE', '%' . $query . '%');
+    })
+    ->with(['user', 'etiquetas'])
+    ->limit(20)
+    ->get()
+    ->map(function($pub) {
+        return [
+            'id' => $pub->id,
+            'titulo' => $pub->titulo,
+            'descripcion' => $pub->descripcion,
+            'user_nombre' => $pub->user ? $pub->user->name : 'Desconocido',
+            'etiquetas' => $pub->etiquetas->pluck('nombre')->toArray(),
+        ];
+    });
+
+    return response()->json($publicaciones);
+}
+
+
+public function mostrarPublicacion($id)
+{
+    $publicacion = Publicacion::with(['user', 'comentarios.user', 'etiquetas'])
+        ->findOrFail($id);
+return view('publicaciones.publicacion_detalle', compact('publicacion'));
+
+}
+
+
+
 
 
 }
