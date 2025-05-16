@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('titulo', 'Sistema de Autenticación')</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -67,7 +70,7 @@
 </main>
 
 <!-- FOOTER -->
-<footer class="bg-azulU text-white mt-16 pt-24 pb-12"> <!-- Aumenta el padding-top a 24 o más según lo necesites -->
+{{-- <footer class="bg-azulU text-white mt-16 pt-24 pb-12"> <!-- Aumenta el padding-top a 24 o más según lo necesites -->
 
 
     <div class="max-w-7xl mx-auto px-6">
@@ -111,7 +114,7 @@
             </div>
         </div>
     </div>
-</footer>
+</footer> --}}
 
 </body>
 </html>

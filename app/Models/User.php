@@ -88,7 +88,10 @@ public function estaSiguiendo($usuarioId)
     {
         return $this->hasMany(Publicacion::class);
     }
-
+public function megustas()
+{
+    return $this->hasMany(MeGusta::class, 'usuario_id');
+}
 
 
 }

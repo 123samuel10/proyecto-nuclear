@@ -64,29 +64,53 @@
         <p class="text-gray-400 text-center">Todavía no has publicado nada.</p>
     @else
         <div class="space-y-6">
-            @foreach ($misPublicaciones as $publicacion)
-                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
-                    <h3 class="font-semibold text-lg text-gray-800">{{ $publicacion->titulo }}</h3>
-                    <p class="text-sm text-gray-500 mb-1">{{ $publicacion->created_at->diffForHumans() }}</p>
-                    <p class="mt-2 text-gray-700">{{ $publicacion->descripcion }}</p>
-                    <p class="mt-2 text-sm text-gray-600"><strong>Tipo:</strong> {{ ucfirst($publicacion->tipo) }}</p>
+@foreach ($misPublicaciones as $publicacion)
+    <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
+        <h3 class="font-semibold text-lg text-gray-800">{{ $publicacion->titulo }}</h3>
+        <p class="text-sm text-gray-500 mb-1">{{ $publicacion->created_at->diffForHumans() }}</p>
+        <p class="mt-2 text-gray-700">{{ $publicacion->descripcion }}</p>
+        <p class="mt-2 text-sm text-gray-600"><strong>Tipo:</strong> {{ ucfirst($publicacion->tipo) }}</p>
 
-                    {{-- Mostrar imagen o enlace al archivo --}}
-                    @if($publicacion->archivo)
-                        @php
-                            $extension = pathinfo($publicacion->archivo, PATHINFO_EXTENSION);
-                        @endphp
+        {{-- Mostrar etiquetas si hay --}}
+        @if ($publicacion->etiquetas->isNotEmpty())
+            <p class="mt-2 text-sm text-gray-600">
+                <strong>Etiquetas:</strong>
+                @foreach ($publicacion->etiquetas as $etiqueta)
+                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1">
+                        {{ $etiqueta->nombre }}
+                    </span>
+                @endforeach
+            </p>
+        @endif
 
-                        @if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
-                            <img src="{{ asset('storage/' . $publicacion->archivo) }}" alt="Imagen de publicación" class="mt-4 w-full h-auto rounded-lg">
-                        @else
-                            <a href="{{ asset('storage/' . $publicacion->archivo) }}" target="_blank" class="text-blue-600 underline mt-4 inline-block">
-                                Ver archivo
-                            </a>
-                        @endif
-                    @endif
-                </div>
-            @endforeach
+   {{-- Mostrar imagen, PDF, Word u otro archivo --}}
+@if($publicacion->archivo)
+    @php
+        $extension = strtolower(pathinfo($publicacion->archivo, PATHINFO_EXTENSION));
+        $rutaArchivo = asset('storage/' . $publicacion->archivo);
+    @endphp
+
+    @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
+        <img src="{{ $rutaArchivo }}" alt="Imagen de publicación" class="mt-4 w-full h-auto rounded-lg shadow-md">
+
+    @elseif ($extension === 'pdf')
+        <iframe src="{{ $rutaArchivo }}#page=1" width="100%" height="500px" class="mt-4 rounded-lg shadow-md"></iframe>
+
+    @elseif (in_array($extension, ['doc', 'docx']))
+        <a href="{{ $rutaArchivo }}" target="_blank" download class="text-blue-600 underline mt-4 inline-block hover:text-blue-800 transition">
+            Descargar archivo Word
+        </a>
+
+    @else
+        <a href="{{ $rutaArchivo }}" target="_blank" class="text-blue-600 underline mt-4 inline-block hover:text-blue-800 transition">
+            Ver archivo
+        </a>
+    @endif
+@endif
+
+    </div>
+@endforeach
+
         </div>
     @endif
 </div>

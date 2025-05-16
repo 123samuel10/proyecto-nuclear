@@ -26,7 +26,11 @@ class ComentarioController extends Controller
         ]);
 
         // Devuelve a la misma página con el comentario agregado
-        return back()->with('success', 'Comentario agregado con éxito!');
+        // return back()->with('success', 'Comentario agregado con éxito!');
+            return redirect()->route('bienvenida')->with([
+            'publicacion_creada' => true,
+            'mensaje_exito' => '¡Comentario creado correctamente!',
+        ]);
     }
 
      // Edita un comentario existente
@@ -59,7 +63,11 @@ class ComentarioController extends Controller
             'contenido' => $request->contenido,
         ]);
 
-        return redirect()->route('bienvenida')->with('success', 'Comentario actualizado con éxito.');
+        // return redirect()->route('bienvenida')->with('success', 'Comentario actualizado con éxito.');
+            return redirect()->route('bienvenida')->with([
+            'publicacion_creada' => true,
+            'mensaje_exito' => '¡Comentario actualizado correctamente!',
+        ]);
     }
 
     // Elimina un comentario
@@ -73,7 +81,11 @@ class ComentarioController extends Controller
 
         $comentario->delete();
 
-        return back()->with('success', 'Comentario eliminado con éxito.');
+        // return back()->with('success', 'Comentario eliminado con éxito.');
+            return redirect()->route('bienvenida')->with([
+            'publicacion_creada' => true,
+            'mensaje_exito' => '¡Comentario elimiado correctamente!',
+        ]);
     }
 
 

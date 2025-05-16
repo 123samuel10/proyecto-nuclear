@@ -111,18 +111,7 @@
             modalIcon.classList.replace('text-green-500', 'text-red-500');
         @endif
 
-        // Mostrar modal de éxito cuando se presione "Restablecer contraseña"
-        btnRestablecer.addEventListener('click', function(event) {
-            event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
-            // Simula la respuesta del servidor (reemplazar esto con la lógica real de tu backend)
-            setTimeout(function() {
-                modalResult.classList.remove('hidden');
-                modalTitle.textContent = "¡Contraseña cambiada!";
-                modalMessage.textContent = "Tu contraseña ha sido actualizada correctamente. Ahora puedes iniciar sesión.";
-                modalIcon.classList.replace('text-green-500', 'text-blue-500');
-            }, 500);  // Simula el tiempo de respuesta del servidor
-        });
     });
 </script>
 
