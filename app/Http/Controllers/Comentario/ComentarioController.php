@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Comentario;
 
-
 use App\Http\Controllers\Controller;
 use App\Models\Comentario;
 use Illuminate\Http\Request;
@@ -10,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ComentarioController extends Controller
 {
-   public function store(Request $request)
+    public function store(Request $request)
     {
         // Validación de los datos de entrada
         $request->validate([
@@ -27,13 +26,13 @@ class ComentarioController extends Controller
 
         // Devuelve a la misma página con el comentario agregado
         // return back()->with('success', 'Comentario agregado con éxito!');
-            return redirect()->route('bienvenida')->with([
+        return redirect()->route('bienvenida')->with([
             'publicacion_creada' => true,
             'mensaje_exito' => '¡Comentario creado correctamente!',
         ]);
     }
 
-     // Edita un comentario existente
+    // Edita un comentario existente
     public function edit($id)
     {
         $comentario = Comentario::findOrFail($id);
@@ -64,7 +63,7 @@ class ComentarioController extends Controller
         ]);
 
         // return redirect()->route('bienvenida')->with('success', 'Comentario actualizado con éxito.');
-            return redirect()->route('bienvenida')->with([
+        return redirect()->route('bienvenida')->with([
             'publicacion_creada' => true,
             'mensaje_exito' => '¡Comentario actualizado correctamente!',
         ]);
@@ -82,13 +81,9 @@ class ComentarioController extends Controller
         $comentario->delete();
 
         // return back()->with('success', 'Comentario eliminado con éxito.');
-            return redirect()->route('bienvenida')->with([
+        return redirect()->route('bienvenida')->with([
             'publicacion_creada' => true,
             'mensaje_exito' => '¡Comentario elimiado correctamente!',
         ]);
     }
-
-
-
-
 }

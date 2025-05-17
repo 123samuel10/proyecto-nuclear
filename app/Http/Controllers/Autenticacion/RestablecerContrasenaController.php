@@ -1,15 +1,16 @@
 <?php
+
 namespace App\Http\Controllers\Autenticacion;
 
-use Illuminate\Http\Request; // Importa la clase Request para manejar las solicitudes HTTP.
-use App\Http\Controllers\Controller; // Importa la clase base Controller.
-use App\Mail\CodigoRecuperacionMail; // Importa la clase del mail que se enviará con el código de recuperación.
-use App\Models\User; // Importa el modelo de usuario.
-use Illuminate\Support\Facades\Hash; // Importa Hash para gestionar contraseñas de manera segura.
-use Carbon\Carbon; // Importa la clase Carbon para manejar fechas y tiempos.
-use Illuminate\Support\Facades\Mail; // Importa la clase Mail para enviar correos.
-use Illuminate\Support\Str; // Importa la clase Str (aunque no se usa en este archivo).
-use Illuminate\Support\Facades\DB; // Importa la fachada DB para interactuar con la base de datos.
+use App\Http\Controllers\Controller; // Importa la clase Request para manejar las solicitudes HTTP.
+use App\Mail\CodigoRecuperacionMail; // Importa la clase base Controller.
+use App\Models\User; // Importa la clase del mail que se enviará con el código de recuperación.
+use Carbon\Carbon; // Importa el modelo de usuario.
+use Illuminate\Http\Request; // Importa Hash para gestionar contraseñas de manera segura.
+use Illuminate\Support\Facades\DB; // Importa la clase Carbon para manejar fechas y tiempos.
+use Illuminate\Support\Facades\Hash; // Importa la clase Mail para enviar correos.
+use Illuminate\Support\Facades\Mail; // Importa la clase Str (aunque no se usa en este archivo).
+use Illuminate\Support\Str; // Importa la fachada DB para interactuar con la base de datos.
 
 class RestablecerContrasenaController extends Controller
 {
@@ -31,11 +32,11 @@ class RestablecerContrasenaController extends Controller
 
         // Verifica si el código de recuperación existe en la base de datos y si coincide con el correo
         $registro = DB::table('codigos_recuperacion')
-                      ->where('email', $request->email)
-                      ->where('codigo', $request->codigo)
-                      ->first();
+            ->where('email', $request->email)
+            ->where('codigo', $request->codigo)
+            ->first();
 
-        if (!$registro) {
+        if (! $registro) {
             // Si no se encuentra el código o no corresponde al correo, muestra un error
             return back()->withErrors(['codigo' => 'El código ingresado es incorrecto o no corresponde a este correo.']);
         }
@@ -75,6 +76,7 @@ class RestablecerContrasenaController extends Controller
         // Intenta enviar el código al correo del usuarioooo
         try {
             Mail::to($email)->send(new CodigoRecuperacionMail($codigo)); // Envía el correo con el código
+
             return back()->with('success', 'Se ha enviado un código a tu correo.'); // Mensaje de éxito
         } catch (\Exception $e) {
             // Si ocurre un error al enviar el correo, muestra un mensaje de error

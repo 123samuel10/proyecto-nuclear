@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-            Schema::create('seguimientos', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
-        $table->foreignId('seguido_id')->constrained('users')->onDelete('cascade');
-        $table->timestamps();
+        Schema::create('seguimientos', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('seguido_id')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
 
-        $table->unique(['usuario_id', 'seguido_id']); // evita seguir dos veces
-    });
+            $table->unique(['usuario_id', 'seguido_id']); // evita seguir dos veces
+        });
     }
 
     /**
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-              Schema::dropIfExists('seguimientos');
+        Schema::dropIfExists('seguimientos');
     }
 };

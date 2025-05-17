@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Seguimiento extends Model
 {
-use HasFactory;
+    use HasFactory;
 
     // Definir los campos que son asignables en masa
     protected $fillable = [
         'usuario_id',
-        'seguido_id'
+        'seguido_id',
     ];
 
     /**

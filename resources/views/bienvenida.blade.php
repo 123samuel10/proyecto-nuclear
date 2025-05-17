@@ -24,20 +24,44 @@
 
 
 
+{{-- TODO NOTIDICACIONESSS --}}
+ <a href="#"
+   class="relative text-white hover:text-gray-300 flex flex-col items-center text-center search-icon"
+   id="abrirModalNotificaciones">
 
-        <a href="#" class="relative text-white hover:text-gray-300 flex flex-col items-center text-center search-icon" data-icon="bell">
     <i class="fas fa-bell text-xl"></i>
     <p class="text-[10px] mt-1">Notificaciones</p>
 
     {{-- Contador --}}
-    <span id="contador-notificaciones" class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden"></span>
+    <span id="contador-notificaciones"
+          class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">
+    </span>
+</a>
+
+<!-- Modal Notificaciones -->
+<div id="modalNotificaciones" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+  <div class="bg-gray-900 text-white rounded-lg shadow-lg w-96 max-w-full max-h-[80vh] overflow-auto p-6 relative">
+    <h2 class="text-2xl font-semibold mb-4">Notificaciones</h2>
+    <button id="cerrarModalNotificaciones" class="absolute top-4 right-4 text-gray-300 hover:text-white text-2xl font-bold">
+      &times;
+    </button>
+
+    <ul id="lista-notificaciones" class="divide-y divide-gray-700">
+      <!-- Aquí se inyectan las notificaciones -->
+    </ul>
+
+    <p id="sin-notificaciones" class="text-center text-gray-400 mt-4 hidden">No tienes notificaciones nuevas.</p>
+  </div>
+</div>
+{{-- ----------------------------------------------------------}}
+
+
+
       {{-- perfil --}}
     <a href="{{ route('ver-perfil') }}" class="text-white hover:text-gray-300 flex flex-col items-center text-center">
             <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Perfil" class="w-10 h-10 rounded-full mt-1">
             <p class="text-[10px] mt-1">Perfil</p>
         </a>
-</a>
-
 
     </div>
 </aside>
@@ -467,5 +491,89 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const btnAbrir = document.getElementById('abrirModalNotificaciones');
+  const modal = document.getElementById('modalNotificaciones');
+  const btnCerrar = document.getElementById('cerrarModalNotificaciones');
+  const lista = document.getElementById('lista-notificaciones');
+  const sinNotis = document.getElementById('sin-notificaciones');
+  const contador = document.getElementById('contador-notificaciones');
+
+  // Función para cargar notificaciones desde backend
+  async function cargarNotificaciones() {
+    try {
+      const response = await fetch('{{ route('notificaciones.lista') }}');
+      const notificaciones = await response.json();
+
+      lista.innerHTML = ''; // limpiar lista
+
+      if (notificaciones.length === 0) {
+        sinNotis.classList.remove('hidden');
+      } else {
+        sinNotis.classList.add('hidden');
+        notificaciones.forEach(noti => {
+          const li = document.createElement('li');
+          li.classList.add('py-2');
+
+          // Puedes darle formato al mensaje y fecha
+          li.innerHTML = `
+            <p>${noti.mensaje}</p>
+            <span class="text-xs text-gray-400">${new Date(noti.fecha).toLocaleString()}</span>
+          `;
+
+          lista.appendChild(li);
+        });
+      }
+
+      // Actualizar contador (solo visible si hay notis)
+      if (notificaciones.length > 0) {
+        contador.textContent = notificaciones.length;
+        contador.classList.remove('hidden');
+      } else {
+        contador.classList.add('hidden');
+      }
+
+    } catch (error) {
+      console.error('Error cargando notificaciones:', error);
+    }
+  }
+
+  // Abrir modal y cargar notificaciones
+  btnAbrir.addEventListener('click', e => {
+    e.preventDefault();
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    cargarNotificaciones();
+  });
+
+  // Cerrar modal
+  btnCerrar.addEventListener('click', () => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  });
+
+  // También cerrar modal si clic fuera del contenido
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  });
+
+  // También puedes actualizar contador al cargar página (como tienes)
+  fetch('{{ route('notificaciones.megusta') }}')
+    .then(response => response.json())
+    .then(data => {
+      if (data.notificaciones > 0) {
+        contador.textContent = data.notificaciones;
+        contador.classList.remove('hidden');
+      } else {
+        contador.classList.add('hidden');
+      }
+    });
+});
+
+
 </script>
 @endsection

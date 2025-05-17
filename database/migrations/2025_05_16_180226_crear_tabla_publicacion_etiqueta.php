@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('publicacion_etiqueta', function (Blueprint $table) {
-        $table->unsignedBigInteger('publicacion_id');
-        $table->unsignedBigInteger('etiqueta_id');
+        Schema::create('publicacion_etiqueta', function (Blueprint $table) {
+            $table->unsignedBigInteger('publicacion_id');
+            $table->unsignedBigInteger('etiqueta_id');
 
-        $table->foreign('publicacion_id')->references('id')->on('publicaciones')->onDelete('cascade');
-        $table->foreign('etiqueta_id')->references('id')->on('etiquetas')->onDelete('cascade');
+            $table->foreign('publicacion_id')->references('id')->on('publicaciones')->onDelete('cascade');
+            $table->foreign('etiqueta_id')->references('id')->on('etiquetas')->onDelete('cascade');
 
-        $table->primary(['publicacion_id', 'etiqueta_id']);
-    });
+            $table->primary(['publicacion_id', 'etiqueta_id']);
+        });
     }
 
     /**

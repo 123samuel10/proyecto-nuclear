@@ -1,15 +1,14 @@
 <?php
 
-
 use App\Http\Controllers\Autenticacion\BienvenidaController;  // Importa el controlador de bienvenida.
 use App\Http\Controllers\Autenticacion\CerrarSesionController; // Importa el controlador para cerrar sesión.
 use App\Http\Controllers\Autenticacion\InicioSesionController; // Importa el controlador para inicio de sesión.
 // use App\Http\Controllers\Autenticacion\RestablecerContrasenaController; // Importa el controlador para recuperar contraseña.
 use App\Http\Controllers\Autenticacion\RegistroController; // Importa el controlador para registro de usuario.
-use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\Autenticacion\RestablecerContrasenaController;
 use App\Http\Controllers\Comentario\ComentarioController;
 use App\Http\Controllers\MeGustaController;
+use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\Seguimiento\SeguimientoController;
 // use App\Http\Controllers\RestablecerContrasenaController as ControllersRestablecerContrasenaController;
@@ -41,8 +40,6 @@ Route::get('/cerrar-sesion', [CerrarSesionController::class, 'cerrarSesion'])->n
 // Ruta GET para cerrar sesión. Se asigna al método 'cerrarSesion' del controlador 'CerrarSesionController'.
 // La ruta tiene el nombre 'logout'.
 
-
-
 Route::get('/bienvenida', [BienvenidaController::class, 'index'])->name('bienvenida');
 // Ruta GET para mostrar la página de bienvenida después de que el usuario haya iniciado sesión. Se asigna al método 'index' del controlador 'BienvenidaController'.
 // La ruta tiene el nombre 'bienvenida'.
@@ -50,34 +47,24 @@ Route::get('/bienvenida', [BienvenidaController::class, 'index'])->name('bienven
 // Route::get('/bienvenida', [BienvenidaController::class, 'index'])->name('bienvenida');
 Route::get('/perfil', [BienvenidaController::class, 'verPerfil'])->name('ver-perfil');
 
-
-
-
 // Route::post('/cambiar-contraseña', [BienvenidaController::class, 'cambiarContraseña'])->name('cambiar-contraseña');
 Route::get('/logout', [BienvenidaController::class, 'logout'])->name('logout');
-
-
 
 // web.php
 Route::get('/recuperar-contraseña', [RestablecerContrasenaController::class, 'mostrarFormulario'])->name('recuperar-contraseña.formulario');
 Route::post('/recuperar-contraseña', [RestablecerContrasenaController::class, 'restablecer'])->name('recuperar-contraseña');
 Route::post('/enviar-codigo', [RestablecerContrasenaController::class, 'enviarCodigo'])->name('enviar-codigo');
 
-
-
-//sistema de busquedad
+// sistema de busquedad
 Route::get('/buscar-usuarios', [BienvenidaController::class, 'buscarUsuarios'])->name('buscar.usuarios');
 Route::get('/buscar-publicaciones-etiqueta', [BienvenidaController::class, 'buscarPublicacionesPorEtiqueta'])->name('buscar.publicaciones.etiqueta');
-
 
 // Ruta para mostrar el formulario de edición de perfil
 Route::get('/perfil/editar', [PerfilController::class, 'editar'])->name('perfil.editar');
 // Ruta para actualizar los datos del perfil
 Route::put('/perfil/actualizar', [PerfilController::class, 'actualizar'])->name('perfil.actualizar');
 
-
-
-//publicaciones
+// publicaciones
 // Route::get('/publicaciones', [PublicacionController::class, 'index'])->name('publicaciones.index');
 Route::get('/publicaciones/crear', [PublicacionController::class, 'create'])->name('publicaciones.create');
 Route::post('/publicaciones', [PublicacionController::class, 'store'])->name('publicaciones.store');
@@ -87,35 +74,28 @@ Route::put('publicaciones/{publicacion}', [PublicacionController::class, 'update
 Route::delete('publicaciones/{publicacion}', [PublicacionController::class, 'destroy'])->name('publicaciones.destroy');
 Route::get('/publicaciones/{publicacion}', [BienvenidaController::class, 'mostrarPublicacion'])->name('publicacion.mostrar');
 
-
-
-//comentarios:
+// comentarios:
 // Route::post('/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
 // Rutas de comentarios
- Route::post('/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
-    Route::get('/comentarios/{id}/edit', [ComentarioController::class, 'edit'])->name('comentarios.edit');
-    Route::put('/comentarios/{id}', [ComentarioController::class, 'update'])->name('comentarios.update');
-    Route::delete('/comentarios/{id}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
-
-
-
-
+Route::post('/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
+Route::get('/comentarios/{id}/edit', [ComentarioController::class, 'edit'])->name('comentarios.edit');
+Route::put('/comentarios/{id}', [ComentarioController::class, 'update'])->name('comentarios.update');
+Route::delete('/comentarios/{id}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
 
 Route::get('/perfil/{id}', [PerfilController::class, 'mostrar'])->name('perfil.mostrar');
 
-
-//sistema de seguimiento:
+// sistema de seguimiento:
 
 Route::post('/seguir/{id}', [SeguimientoController::class, 'seguir'])->name('seguir');
 Route::delete('/dejar-de-seguir/{id}', [SeguimientoController::class, 'dejarDeSeguir'])->name('dejarDeSeguir');
 
-
-//me gusta
+// me gusta
 // web.php
 Route::post('/me-gusta/{publicacion}', [MeGustaController::class, 'toggle'])->name('me-gusta.toggle');
 
 Route::get('/me-gusta/{publicacion}/usuarios', [MeGustaController::class, 'usuarios'])->name('me-gusta.usuarios');
 
+// notificaciones
+Route::get('/notificaciones/megusta', [MeGustaController::class, 'notificaciones'])->name('notificaciones.megusta');
 
-//notificaciones
-Route::get('/notificaciones-me-gusta', [MeGustaController::class, 'notificaciones'])->name('notificaciones.megusta');
+Route::get('/notificaciones/lista', [MeGustaController::class, 'listaNotificaciones'])->name('notificaciones.lista');

@@ -1,7 +1,9 @@
 <?php
+
 // Abre la etiqueta PHP, necesaria para cualquier archivo PHP.
 
 namespace App\Mail;
+
 // Define el namespace (espacio de nombres) donde está esta clase; ayuda a organizar el código.
 
 use Illuminate\Bus\Queueable;
@@ -20,11 +22,11 @@ use Illuminate\Mail\Mailables\Envelope;
 // Importa la clase Envelope, que ayuda a definir el sobre (asunto, remitente, etc.) del correo (tampoco se usa aquí directamente).
 
 use Illuminate\Queue\SerializesModels;
+
 // Importa el trait SerializesModels, que permite serializar modelos Eloquent al ponerlos en una cola.
 
 class CodigoRecuperacionMail extends Mailable
-// Define la clase CodigoRecuperacionMail que extiende de Mailable (es decir, es un correo que se puede enviar).
-
+    // Define la clase CodigoRecuperacionMail que extiende de Mailable (es decir, es un correo que se puede enviar).
 {
     use Queueable, SerializesModels;
     // Usa los traits Queueable (para colas) y SerializesModels (para serializar modelos si es necesario).
@@ -42,11 +44,9 @@ class CodigoRecuperacionMail extends Mailable
     {
         return $this->subject('Tu código de recuperación')
                     // Define el asunto del correo como 'Tu código de recuperación'.
-
-                    ->markdown('emails.codigo_recuperacion')
+            ->markdown('emails.codigo_recuperacion')
                     // Indica que se usará una plantilla Markdown ubicada en resources/views/emails/codigo_recuperacion.blade.php.
-
-                    ->with(['codigo' => $this->codigo]);
-                    // Pasa la variable $codigo a la vista como una variable llamada 'codigo'.
+            ->with(['codigo' => $this->codigo]);
+        // Pasa la variable $codigo a la vista como una variable llamada 'codigo'.
     }
 }

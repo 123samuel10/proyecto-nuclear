@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Etiqueta;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class EtiquetasSeeder extends Seeder
@@ -24,7 +23,7 @@ class EtiquetasSeeder extends Seeder
             'Marketing Digital',
             'Enfermería',
             'Veterinaria',
-            'Psicología'
+            'Psicología',
         ];
 
         foreach ($etiquetas as $etiqueta) {
