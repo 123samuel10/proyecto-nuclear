@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Etiqueta extends Model
 {
-   protected $fillable = ['nombre'];
+    protected $fillable = ['nombre'];
 
     public function publicaciones()
     {

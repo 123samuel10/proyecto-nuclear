@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comentario extends Model
 {
- use HasFactory;
+    use HasFactory;
 
     protected $fillable = ['user_id', 'publicacion_id', 'contenido']; // Asegúrate de que estos campos puedan ser rellenados
 
@@ -17,9 +17,6 @@ class Comentario extends Model
         return $this->belongsTo(User::class); // Un comentario pertenece a un usuario
     }
 
-
-
-
     // Relación con el modelo Publicacion
     public function publicacion()
     {
@@ -27,9 +24,7 @@ class Comentario extends Model
     }
 
     public function likes()
-{
-    return $this->belongsToMany(User::class, 'comentario_likes');
-}
-
-
+    {
+        return $this->belongsToMany(User::class, 'comentario_likes');
+    }
 }

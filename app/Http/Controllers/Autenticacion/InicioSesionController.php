@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Autenticacion;
 
 // Importa la clase base Controller de Laravel, que permite crear controladores.
 use App\Http\Controllers\Controller;
-
 // Importa la clase Request de Laravel, que se usa para manejar las solicitudes HTTP.
 use Illuminate\Http\Request;
-
 // Importa la fachada Auth, que permite trabajar con la autenticación de usuarios.
 use Illuminate\Support\Facades\Auth;
 

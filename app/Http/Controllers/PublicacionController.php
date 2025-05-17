@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Storage;
 
 class PublicacionController extends Controller
 {
-  public function create()
+    public function create()
     {
         $etiquetas = Etiqueta::all();
+
         return view('publicaciones.crear', compact('etiquetas'));
     }
 
@@ -24,7 +25,7 @@ class PublicacionController extends Controller
             'tipo' => 'required|in:tutorial,video,material,articulo,evento',
             'archivo' => 'nullable|file|max:20480',
             'etiquetas' => 'nullable|array',
-            'etiquetas.*' => 'exists:etiquetas,id'
+            'etiquetas.*' => 'exists:etiquetas,id',
         ]);
 
         $rutaArchivo = null;
@@ -68,7 +69,7 @@ class PublicacionController extends Controller
             'tipo' => 'required|in:tutorial,video,material,articulo,evento',
             'archivo' => 'nullable|file|mimes:jpg,png,pdf,docx,txt|max:20480',
             'etiquetas' => 'nullable|array',
-            'etiquetas.*' => 'exists:etiquetas,id'
+            'etiquetas.*' => 'exists:etiquetas,id',
         ]);
 
         $publicacion = Publicacion::findOrFail($id);
@@ -110,6 +111,4 @@ class PublicacionController extends Controller
             'mensaje_exito' => '¡Publicación eliminada correctamente!',
         ]);
     }
-
-
 }

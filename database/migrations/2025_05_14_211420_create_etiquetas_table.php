@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('etiquetas', function (Blueprint $table) {
-        $table->id();
-        $table->string('nombre')->unique();
-        $table->timestamps();
-    });
+        Schema::create('etiquetas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre')->unique();
+            $table->timestamps();
+        });
     }
 
     /**

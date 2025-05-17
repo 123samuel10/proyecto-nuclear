@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Publicacion extends Model
 {
@@ -27,22 +26,22 @@ class Publicacion extends Model
     }
 
     public function comentarios()
-{
-    return $this->hasMany(Comentario::class);
-}
-public function etiquetas()
-{
-    return $this->belongsToMany(Etiqueta::class, 'publicacion_etiqueta');
-}
-public function megustas()
-{
-    return $this->hasMany(MeGusta::class, 'publicacion_id');
-}
+    {
+        return $this->hasMany(Comentario::class);
+    }
 
-public function leDioMeGusta($usuarioId)
-{
-    return $this->megustas()->where('usuario_id', $usuarioId)->exists();
-}
+    public function etiquetas()
+    {
+        return $this->belongsToMany(Etiqueta::class, 'publicacion_etiqueta');
+    }
 
+    public function megustas()
+    {
+        return $this->hasMany(MeGusta::class, 'publicacion_id');
+    }
 
+    public function leDioMeGusta($usuarioId)
+    {
+        return $this->megustas()->where('usuario_id', $usuarioId)->exists();
+    }
 }

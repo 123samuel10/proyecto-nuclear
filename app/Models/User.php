@@ -1,7 +1,8 @@
-<?php // Indica que el archivo es de PHP
+<?php
+
+// Indica que el archivo es de PHP
 
 namespace App\Models; // Define el namespace donde se encuentra el modelo User
-
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail; // (Comentado) Se usaría si quisieras requerir verificación de email
 
@@ -52,7 +53,7 @@ class User extends Authenticatable // Define la clase User que hereda de Authent
         ];
     }
 
-   /**
+    /**
      * Usuarios que siguen a este usuario.
      */
     /**
@@ -61,37 +62,32 @@ class User extends Authenticatable // Define la clase User que hereda de Authent
     /**
      * Relación con los seguidores
      */
-// Relación con los seguidores
-public function seguidores()
-{
-    return $this->belongsToMany(User::class, 'seguimientos', 'seguido_id', 'usuario_id');
-}
+    // Relación con los seguidores
+    public function seguidores()
+    {
+        return $this->belongsToMany(User::class, 'seguimientos', 'seguido_id', 'usuario_id');
+    }
 
-// Relación con los seguidos
-public function seguidos()
-{
-    return $this->belongsToMany(User::class, 'seguimientos', 'usuario_id', 'seguido_id');
-}
+    // Relación con los seguidos
+    public function seguidos()
+    {
+        return $this->belongsToMany(User::class, 'seguimientos', 'usuario_id', 'seguido_id');
+    }
 
-public function estaSiguiendo($usuarioId)
-{
-    // Corregir la referencia a la columna `id` de la tabla `users` correctamente
-    return $this->seguidos()->where('seguimientos.seguido_id', $usuarioId)->exists();
-}
+    public function estaSiguiendo($usuarioId)
+    {
+        // Corregir la referencia a la columna `id` de la tabla `users` correctamente
+        return $this->seguidos()->where('seguimientos.seguido_id', $usuarioId)->exists();
+    }
 
-
-
-
-
-  // Relación con las publicaciones
+    // Relación con las publicaciones
     public function publicaciones()
     {
         return $this->hasMany(Publicacion::class);
     }
-public function megustas()
-{
-    return $this->hasMany(MeGusta::class, 'usuario_id');
-}
 
-
+    public function megustas()
+    {
+        return $this->hasMany(MeGusta::class, 'usuario_id');
+    }
 }

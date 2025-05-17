@@ -6,24 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notificacion extends Model
 {
-
- protected $table = 'notificaciones'; // o el nombre que uses en la BD
+    protected $table = 'notificaciones';
 
     protected $fillable = [
         'usuario_id',
+        'publicacion_id',
+        'tipo',
         'mensaje',
         'leida',
-        // otros campos...
     ];
 
+    // Opcional: relaciones si quieres
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
 
     public function publicacion()
     {
-        return $this->belongsTo(Publicacion::class);
+        return $this->belongsTo(Publicacion::class, 'publicacion_id');
     }
-    public function user()
-{
-    return $this->belongsTo(User::class);
-}
-
 }
