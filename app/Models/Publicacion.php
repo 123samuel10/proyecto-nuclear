@@ -44,4 +44,6 @@ class Publicacion extends Model
     {
         return $this->megustas()->where('usuario_id', $usuarioId)->exists();
     }
+
+
 }

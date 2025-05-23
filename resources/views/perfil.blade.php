@@ -24,11 +24,19 @@
         </div>
 
         {{-- Foto de perfil --}}
-        <div class="relative">
-            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-azulU shadow-lg">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=random&size=300" alt="Foto de perfil" class="w-full h-full object-cover">
-            </div>
-        </div>
+   {{-- Foto de perfil --}}
+<div class="relative">
+    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-azulU shadow-lg">
+        @if ($user->foto_perfil)
+            <img
+                src="{{ asset('storage/' . $user->foto_perfil) }}"
+                alt="Foto de perfil"
+                class="w-full h-full object-cover"
+            >
+        @endif
+    </div>
+</div>
+
 
         {{-- Información del usuario --}}
         <div class="flex-1 text-center md:text-left">

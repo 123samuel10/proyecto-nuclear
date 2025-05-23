@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Perfil de Usuario</title>
 
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Tipografía -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 
     <!-- Colores personalizados -->
     <script>
@@ -29,7 +29,6 @@
         }
     </script>
 </head>
-
 <body class="bg-grisClaro text-gray-800 font-sans antialiased">
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
@@ -40,7 +39,12 @@
             <!-- Foto de perfil -->
             <div class="relative flex-shrink-0">
                 <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-azulU shadow-md">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=random&size=300" alt="Foto de perfil" class="w-full h-full object-cover">
+              <img
+    src="{{ $user->foto_perfil ? asset('storage/' . $user->foto_perfil) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=random&size=300' }}"
+    alt="Foto de perfil"
+    class="w-full h-full object-cover"
+/>
+
                 </div>
             </div>
 
@@ -51,8 +55,10 @@
 
                 <!-- Botón Volver -->
                 <div class="mt-6">
-                    <a href="{{ route('ver-perfil') }}"
-                       class="inline-block bg-azulU hover:bg-white hover:text-azulU border-2 border-azulU text-white text-sm font-semibold px-8 py-3 rounded-full shadow-md transition-all duration-300 hover:scale-105">
+                    <a
+                        href="{{ route('ver-perfil') }}"
+                        class="inline-block bg-azulU hover:bg-white hover:text-azulU border-2 border-azulU text-white text-sm font-semibold px-8 py-3 rounded-full shadow-md transition-all duration-300 hover:scale-105"
+                    >
                         Volver al perfil
                     </a>
                 </div>
@@ -69,54 +75,106 @@
                 </div>
             @endif
 
-            <form action="{{ route('perfil.actualizar') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+            <form
+                action="{{ route('perfil.actualizar') }}"
+                method="POST"
+                enctype="multipart/form-data"
+                class="space-y-8"
+            >
                 @csrf
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    <!--old() es una función de Laravel que permite recuperar e
-                    l valor previamente enviado en un formulario, para mantener los datos ingresados por el usuario en caso de que ocurra un error de validación.-->
                     <!-- Nombre -->
                     <div>
                         <label class="block mb-2 text-sm font-bold text-gray-700">Nombre</label>
-                        <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                               class="w-full border border-gray-300 rounded-xl p-3 focus:border-azulU focus:ring-azulU focus:ring-2 focus:outline-none">
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ old('name', $user->name) }}"
+                            class="w-full border border-gray-300 rounded-xl p-3 focus:border-azulU focus:ring-azulU focus:ring-2 focus:outline-none"
+                        />
                     </div>
 
                     <!-- Foto de Perfil -->
                     <div>
                         <label class="block mb-2 text-sm font-bold text-gray-700">Foto de Perfil</label>
-                        <input type="file" name="foto_perfil"
-                               class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-azulU file:text-white hover:file:bg-white hover:file:text-azulU transition-all cursor-pointer">
+                        <input
+                            type="file"
+                            name="foto_perfil"
+                            class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-azulU file:text-white hover:file:bg-white hover:file:text-azulU transition-all cursor-pointer"
+                        />
                     </div>
                 </div>
 
                 <!-- Descripción Académica -->
                 <div>
                     <label class="block mb-2 text-sm font-bold text-gray-700">Descripción Académica</label>
-                    <textarea name="descripcion_academica" rows="4"
-                              class="w-full border border-gray-300 rounded-xl p-4 focus:border-azulU focus:ring-azulU focus:ring-2 resize-none focus:outline-none">{{ old('descripcion_academica', $user->descripcion_academica) }}</textarea>
+                    <textarea
+                        name="descripcion_academica"
+                        rows="4"
+                        class="w-full border border-gray-300 rounded-xl p-4 focus:border-azulU focus:ring-azulU focus:ring-2 resize-none focus:outline-none"
+                    >{{ old('descripcion_academica', $user->descripcion_academica) }}</textarea>
                 </div>
 
                 <!-- Intereses -->
-                <div>
-                    <label class="block mb-2 text-sm font-bold text-gray-700">Intereses</label>
-                    <textarea name="intereses" rows="3"
-                              class="w-full border border-gray-300 rounded-xl p-4 focus:border-azulU focus:ring-azulU focus:ring-2 resize-none focus:outline-none">{{ old('intereses', $user->intereses) }}</textarea>
-                </div>
+              <!-- Intereses -->
+<div class="mb-6">
+    <label for="intereses" class="block mb-2 text-sm font-bold text-gray-700">
+        Selecciona tus intereses
+    </label>
+
+    <div class="flex flex-wrap gap-3">
+        @php
+            $todosLosIntereses = [
+                'Medicina',
+                'Ingeniería de Software',
+                'Ingeniería Industrial',
+                'Ingeniería Civil',
+                'Marketing Digital',
+                'Enfermería',
+                'Veterinaria',
+                'Psicología'
+            ];
+            $interesesSeleccionados = old('intereses', explode(',', $user->intereses));
+        @endphp
+
+        @foreach ($todosLosIntereses as $interes)
+            <label class="cursor-pointer">
+                <input
+                    type="checkbox"
+                    name="intereses[]"
+                    value="{{ $interes }}"
+                    class="peer hidden"
+                    {{ in_array(trim($interes), $interesesSeleccionados) ? 'checked' : '' }}
+                />
+                <span
+                    class="inline-block px-4 py-2 rounded-full border border-azulU text-azulU peer-checked:bg-azulU peer-checked:text-white transition-all duration-200"
+                >
+                    {{ $interes }}
+                </span>
+            </label>
+        @endforeach
+    </div>
+
+    <p class="mt-2 text-sm text-gray-500">
+        Haz clic en los intereses que más te representen.
+    </p>
+</div>
+
 
                 <!-- Botón Guardar Cambios -->
                 <div class="text-center pt-8">
-                    <button type="submit"
-                            class="bg-azulU hover:bg-rojoU text-white font-bold py-3 px-10 rounded-full shadow-lg transition-all duration-300 hover:scale-105">
+                    <button
+                        type="submit"
+                        class="bg-azulU hover:bg-rojoU text-white font-bold py-3 px-10 rounded-full shadow-lg transition-all duration-300 hover:scale-105"
+                    >
                         Guardar Cambios
                     </button>
                 </div>
             </form>
         </div>
-
     </div>
-
 </body>
 </html>
