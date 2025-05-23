@@ -90,4 +90,10 @@ class User extends Authenticatable // Define la clase User que hereda de Authent
     {
         return $this->hasMany(MeGusta::class, 'usuario_id');
     }
+public function etiquetas()
+{
+    return $this->belongsToMany(Etiqueta::class, 'etiqueta_user'); // nombre de tabla pivote
+}
+
+
 }

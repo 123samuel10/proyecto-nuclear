@@ -19,16 +19,43 @@ use Illuminate\Support\Facades\Hash; // Importa Hash para gestionar contraseñas
 // Definición de la clase BienvenidaController que extiende de la clase base Controller
 class BienvenidaController extends Controller
 {
-    // Método que se encarga de mostrar las publicaciones en la página de bienvenida
-    public function index()
-    {
-        // Trae todas las publicaciones, ordenadas de más reciente a más antigua
-        // $publicaciones = Publicacion::latest()->get();
-        $publicaciones = Publicacion::with('comentarios.user')->latest()->get(); // Carga las publicaciones junto con los comentarios y los usuarios asociados
 
-        // Devuelve la vista 'bienvenida' pasando las publicaciones como parámetro
-        return view('bienvenida', compact('publicaciones'));
+     // Método que se encarga de mostrar las publicaciones en la página de bienvenida
+    // public function index()
+    // {
+    //     // Trae todas las publicaciones, ordenadas de más reciente a más antigua
+    //     // $publicaciones = Publicacion::latest()->get();
+    //     $publicaciones = Publicacion::with('comentarios.user')->latest()->get(); // Carga las publicaciones junto con los comentarios y los usuarios asociados
+
+    //     // Devuelve la vista 'bienvenida' pasando las publicaciones como parámetro
+    //     return view('bienvenida', compact('publicaciones'));
+    // }
+    // Método que se encarga de mostrar las publicaciones en la página de bienvenida
+public function index()
+{
+    $user = Auth::user(); // Usuario autenticado
+
+    if ($user && $user->intereses) {
+        // Convertir los intereses del usuario en array (asumiendo que están separados por comas)
+        $intereses = array_map('trim', explode(',', $user->intereses));
+
+        // Buscar publicaciones que tengan alguna etiqueta que coincida con los intereses
+        $publicaciones = \App\Models\Publicacion::whereHas('etiquetas', function ($query) use ($intereses) {
+            $query->whereIn('nombre', $intereses);
+        })->with('comentarios.user', 'etiquetas')->latest()->get();
+
+        // Si no se encontraron publicaciones, mostrar todas
+        if ($publicaciones->isEmpty()) {
+            $publicaciones = \App\Models\Publicacion::with('comentarios.user', 'etiquetas')->latest()->get();
+        }
+    } else {
+        // Si el usuario no tiene intereses registrados
+        $publicaciones = \App\Models\Publicacion::with('comentarios.user', 'etiquetas')->latest()->get();
     }
+
+    return view('bienvenida', compact('publicaciones'));
+}
+
 
     // Método que muestra el perfil del usuario autenticado
     public function verPerfil()

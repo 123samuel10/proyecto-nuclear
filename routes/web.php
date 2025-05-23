@@ -99,3 +99,16 @@ Route::get('/me-gusta/{publicacion}/usuarios', [MeGustaController::class, 'usuar
 Route::get('/notificaciones/megusta', [MeGustaController::class, 'notificaciones'])->name('notificaciones.megusta');
 
 Route::get('/notificaciones/lista', [MeGustaController::class, 'listaNotificaciones'])->name('notificaciones.lista');
+
+
+Route::get('/notificaciones/comentarios', [ComentarioController::class, 'notificaciones'])->name('notificaciones.comentarios');
+Route::get('/notificaciones/comentarios/lista', [ComentarioController::class, 'listaNotificaciones'])->name('notificaciones.comentarios.lista');
+
+
+
+
+// Rutas para contar notificaciones de seguimiento
+Route::get('/notificaciones/seguimiento', [SeguimientoController::class, 'notificaciones'])->name('notificaciones.seguimiento');
+
+// Ruta para listar notificaciones de seguimiento
+Route::get('/notificaciones/seguimiento/lista', [SeguimientoController::class, 'listaNotificaciones'])->name('notificaciones.seguimiento.lista');

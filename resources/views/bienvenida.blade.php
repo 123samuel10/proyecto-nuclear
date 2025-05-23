@@ -478,20 +478,19 @@ document.querySelectorAll('.btn-me-gusta').forEach(button => {
 
 
 //notificaciones document.addEventListener("DOMContentLoaded", function () {
-document.addEventListener("DOMContentLoaded", function () {
-    fetch('{{ route('notificaciones.megusta') }}')
-        .then(response => response.json())
-        .then(data => {
-            const contador = document.getElementById('contador-notificaciones');
-            if (data.notificaciones > 0) {
-                contador.textContent = data.notificaciones;
-                contador.classList.remove('hidden');
-            } else {
-                contador.classList.add('hidden');
-            }
-        });
-});
-
+// document.addEventListener("DOMContentLoaded", function () {
+//     fetch('{{ route('notificaciones.megusta') }}')
+//         .then(response => response.json())
+//         .then(data => {
+//             const contador = document.getElementById('contador-notificaciones');
+//             if (data.notificaciones > 0) {
+//                 contador.textContent = data.notificaciones;
+//                 contador.classList.remove('hidden');
+//             } else {
+//                 contador.classList.add('hidden');
+//             }
+//         });
+// });
 document.addEventListener("DOMContentLoaded", function () {
   const btnAbrir = document.getElementById('abrirModalNotificaciones');
   const modal = document.getElementById('modalNotificaciones');
@@ -500,46 +499,55 @@ document.addEventListener("DOMContentLoaded", function () {
   const sinNotis = document.getElementById('sin-notificaciones');
   const contador = document.getElementById('contador-notificaciones');
 
-  // Función para cargar notificaciones desde backend
   async function cargarNotificaciones() {
     try {
-      const response = await fetch('{{ route('notificaciones.lista') }}');
-      const notificaciones = await response.json();
+      const [respComentarios, respMeGusta, respSeguimiento] = await Promise.all([
+        fetch('{{ route("notificaciones.comentarios.lista") }}'),
+        fetch('{{ route("notificaciones.lista") }}'),
+        fetch('{{ route("notificaciones.seguimiento.lista") }}'),
+      ]);
 
-      lista.innerHTML = ''; // limpiar lista
+      const [notisComentarios, notisMeGusta, notisSeguimiento] = await Promise.all([
+        respComentarios.json(),
+        respMeGusta.json(),
+        respSeguimiento.json(),
+      ]);
 
-      if (notificaciones.length === 0) {
+      const todasNotificaciones = [
+        ...notisComentarios,
+        ...notisMeGusta,
+        ...notisSeguimiento,
+      ];
+
+      todasNotificaciones.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+      lista.innerHTML = '';
+
+      if (todasNotificaciones.length === 0) {
         sinNotis.classList.remove('hidden');
       } else {
         sinNotis.classList.add('hidden');
-        notificaciones.forEach(noti => {
+
+        todasNotificaciones.forEach(noti => {
           const li = document.createElement('li');
           li.classList.add('py-2');
-
-          // Puedes darle formato al mensaje y fecha
           li.innerHTML = `
             <p>${noti.mensaje}</p>
             <span class="text-xs text-gray-400">${new Date(noti.fecha).toLocaleString()}</span>
           `;
-
           lista.appendChild(li);
         });
       }
 
-      // Actualizar contador (solo visible si hay notis)
-      if (notificaciones.length > 0) {
-        contador.textContent = notificaciones.length;
-        contador.classList.remove('hidden');
-      } else {
-        contador.classList.add('hidden');
-      }
+      // Actualizar contador
+      contador.textContent = todasNotificaciones.length;
+      contador.classList.toggle('hidden', todasNotificaciones.length === 0);
 
     } catch (error) {
       console.error('Error cargando notificaciones:', error);
     }
   }
 
-  // Abrir modal y cargar notificaciones
   btnAbrir.addEventListener('click', e => {
     e.preventDefault();
     modal.classList.remove('hidden');
@@ -547,13 +555,11 @@ document.addEventListener("DOMContentLoaded", function () {
     cargarNotificaciones();
   });
 
-  // Cerrar modal
   btnCerrar.addEventListener('click', () => {
     modal.classList.add('hidden');
     modal.classList.remove('flex');
   });
 
-  // También cerrar modal si clic fuera del contenido
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.classList.add('hidden');
@@ -561,18 +567,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // También puedes actualizar contador al cargar página (como tienes)
-  fetch('{{ route('notificaciones.megusta') }}')
-    .then(response => response.json())
-    .then(data => {
-      if (data.notificaciones > 0) {
-        contador.textContent = data.notificaciones;
-        contador.classList.remove('hidden');
-      } else {
-        contador.classList.add('hidden');
-      }
-    });
+  async function actualizarContador() {
+    try {
+      const [respComentarios, respMeGusta, respSeguimiento] = await Promise.all([
+        fetch('{{ route("notificaciones.comentarios") }}'),
+        fetch('{{ route("notificaciones.megusta") }}'),
+        fetch('{{ route("notificaciones.seguimiento") }}'),
+      ]);
+
+      const [dataComentarios, dataMeGusta, dataSeguimiento] = await Promise.all([
+        respComentarios.json(),
+        respMeGusta.json(),
+        respSeguimiento.json(),
+      ]);
+
+      const total = dataComentarios.notificaciones + dataMeGusta.notificaciones + dataSeguimiento.notificaciones;
+
+      contador.textContent = total;
+      contador.classList.toggle('hidden', total === 0);
+    } catch (error) {
+      console.error('Error actualizando contador:', error);
+    }
+  }
+
+  actualizarContador();
 });
+
 
 
 </script>

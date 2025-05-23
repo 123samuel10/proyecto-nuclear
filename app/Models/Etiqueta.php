@@ -12,4 +12,9 @@ class Etiqueta extends Model
     {
         return $this->belongsToMany(Publicacion::class, 'publicacion_etiqueta');
     }
+    public function users()
+{
+    return $this->belongsToMany(User::class, 'etiqueta_user');
+}
+
 }
