@@ -21,12 +21,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
         
     - name: Install dependencies
       run: |
         composer install
-        npm ci
+        # Usar npm install si no hay package-lock.json
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
         
     - name: Prepare Laravel
       run: |
