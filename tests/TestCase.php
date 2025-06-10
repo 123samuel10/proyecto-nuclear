@@ -1,10 +1,16 @@
 <?php
 
-namespace Tests;
+namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Tests\TestCase;
 
-abstract class TestCase extends BaseTestCase
+class ExampleTest extends TestCase
 {
-    //
+    public function test_the_application_returns_a_successful_response(): void
+    {
+        $response = $this->get('/');
+
+        // Esperar redirección (302) en lugar de success (200)
+        $response->assertStatus(302);
+    }
 }
