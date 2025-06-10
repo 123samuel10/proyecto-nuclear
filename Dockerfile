@@ -28,7 +28,7 @@ COPY . .
 
 # Instalar dependencias y construir
 RUN composer install --no-dev --optimize-autoloader \
-    && npm ci \
+    && npm install \
     && npm run build \
     && chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
